@@ -54,4 +54,36 @@ server {
 **Step 4 - Configuring Secured Connection Using SSL/TLS Certificates**
 ---
 
-- 
+- Install Certbot. This is what will be used to request an SSL certificate. Run `sudo snap install --classic certbot`. If it doesn't install, enable `snapd` is running as it's the package manager that will be used `sudo systemctl status snapd`.
+
+- Run the commands below and follow the instructions to request the certificate:
+```
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo certbot --nginx
+```
+
+- After the certificate has been provisioned, test the connection by going to the domain name with `https://<domain_name.xxx>`.
+
+![SSL Certificate](sslcerti.png)
+
+**Step 5 - Set Up Periodic Renewal Of The SSL/TLS Certificate**
+---
+
+*By default, the SSL certificate lasts around 90 days. It will become a hassle real quick to SSH into the load balancer to renew the certificate manually. To avoid that, we will set up an automated cronjob to do the work for us*
+
+- Run `crontab -e` to open up crontab. Select the preferred editor to open the file.
+
+- Insert the command below to configure the cronjob to run twice a day.
+```
+* */12 * * *   root /usr/bin/certbot renew > /dev/null 2>&1
+```
+
+![Cronjob for twice a day](cronjob1.png)
+
+- You can initiate a certificate renewal manually by running `sudo certbot renew --dry-run`.
+
+*I later modified the cronjob to run every fortnight as I found out that twice a day was a little too much for a certificate that lasts for 90 days*
+
+![Cronjob for 14 days](cronjob2.png)
+
+**Load Balancer Solution With NGINX & SSL/TLS Deployed Successfully!**
