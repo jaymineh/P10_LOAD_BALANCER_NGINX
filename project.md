@@ -45,11 +45,11 @@ server {
 
 - Go to `http://freenoms.com` and create a free domain name and link it with the elastic IP from AWS. After this, test by putting the domain name in your browser to see if it resolves to the load balancer webpage.
 
-![Domain name resolution](jaymineh.png)
+![Domain name resolution](images/jaymineh.png)
 
 - Update the nginx config file so it recognizes the new domain name by changing the `server_name` field to the newly acquired domain name.
 
-![Load Balancer Config](ngixconf.png)
+![Load Balancer Config](images/ngixconf.png)
 
 **Step 4 - Configuring Secured Connection Using SSL/TLS Certificates**
 ---
@@ -64,7 +64,7 @@ sudo certbot --nginx
 
 - After the certificate has been provisioned, test the connection by going to the domain name with `https://<domain_name.xxx>`.
 
-![SSL Certificate](sslcerti.png)
+![SSL Certificate](images/sslcerti.png)
 
 **Step 5 - Set Up Periodic Renewal Of The SSL/TLS Certificate**
 ---
@@ -78,12 +78,12 @@ sudo certbot --nginx
 * */12 * * *   root /usr/bin/certbot renew > /dev/null 2>&1
 ```
 
-![Cronjob for twice a day](cronjob1.png)
+![Cronjob for twice a day](images/cronjob1.png)
 
 - You can initiate a certificate renewal manually by running `sudo certbot renew --dry-run`.
 
 *I later modified the cronjob to run every fortnight as I found out that twice a day was a little too much for a certificate that lasts for 90 days*
 
-![Cronjob for 14 days](cronjob2.png)
+![Cronjob for 14 days](images/cronjob2.png)
 
 **Load Balancer Solution With NGINX & SSL/TLS Deployed Successfully!**
